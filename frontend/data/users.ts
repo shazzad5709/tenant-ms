@@ -1,0 +1,32 @@
+export const users = [
+  {
+    id: 1,
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'johndoe@gmail.com',
+    role: 'houseowner',
+    phone: '08123456789',
+    passportId: 'A1234567',
+    address: '1674 Rocky Mountain Ave, Milpitas, California(CA), 95035',
+  },
+  {
+    id: 2,
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'johndoe@gmail.com',
+    role: 'tenant',
+    phone: '08123456789',
+    passportId: 'A1234567',
+    address: '1674 Rocky Mountain Ave, Milpitas, California(CA), 95035',
+  },
+  {
+    id: 3,
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'johndoe@gmail.com',
+    role: 'tenant',
+    phone: '08123456789',
+    passportId: 'A1234567',
+    address: '1674 Rocky Mountain Ave, Milpitas, California(CA), 95035',
+  },
+]

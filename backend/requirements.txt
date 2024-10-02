@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+pydantic
+pymongo>=4.5
+pymongo[srv]
+motor>=3.3
+passlib
+pyjwt
+python-dotenv
+pydantic[email]
+bcrypt
+python-multipart
+fastapi-cors
