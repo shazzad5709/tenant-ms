@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { UpdateHouseFormBoundary } from '../boundary/UpdateHouseFormBoundary';
 import useUser from '@/hooks/useUser';
-import HouseEntity from '../entity/House';
+import HouseEntity, { House } from '../entity/House';
 import { HouseFormData } from '../boundary/AddHouseFormBoundary';
 import { InfinitySpin } from 'react-loader-spinner';
 
@@ -12,22 +12,25 @@ type Props = {
 };
 
 export const UpdateHouseController: React.FC<Props> = ({ houseId }) => {
-  const [error, setError] = useState<string>('');
   const { user } = useUser();
   const router = useRouter();
   const [house, setHouse] = useState<HouseFormData>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchHouse = async (houseId: string) => {
+    setLoading(true);
+    if (!houseId) {
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await HouseEntity.getHouse(houseId);
-      if ('status' in res && res.status === 200) {
-        const house = res.data as HouseFormData;
-        setHouse(house);
-      } else if (res instanceof Error) {
-        setError(res.message);
-      }
+      setHouse(res);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -37,24 +40,23 @@ export const UpdateHouseController: React.FC<Props> = ({ houseId }) => {
   }, []);
 
   const updateHouseClickedEvent = async (data: HouseFormData) => {
+    setLoading(true);
     try {
       const res = await HouseEntity.updateHouse(houseId, data);
-      if ('status' in res && res.status === 200) {
-        alert('House updated successfully');
-        router.push('/homeowner/house');
-      } else if (res instanceof Error) {
-        alert('Failed to update house');
-      }
+      alert(res);
+      router.push('/homeowner/house');
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (user?.role !== 'Homeowner') {
+  if (user?.role !== 'homeowner') {
     return <div>Unauthorized</div>;
   }
 
-  if (!house)
+  if (loading)
     return (
       <div className='absolute inset-0 bg-white h-screen flex items-center justify-center text-xl'>
         <InfinitySpin color='black' />
@@ -62,9 +64,15 @@ export const UpdateHouseController: React.FC<Props> = ({ houseId }) => {
     );
 
   return (
-    <UpdateHouseFormBoundary
-      house={house}
-      updateHouse={updateHouseClickedEvent}
-    />
+    <div>
+      {house ? (
+        <UpdateHouseFormBoundary
+          house={house}
+          updateHouse={updateHouseClickedEvent}
+        />
+      ) : (
+        <div>House not found</div>
+      )}
+    </div>
   );
 };

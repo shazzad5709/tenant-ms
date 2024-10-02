@@ -25,14 +25,11 @@ export const AddHouseController: React.FC<Props> = ({
 
       const res = await HouseEntity.addHouse(data);
 
-      if ('status' in res && res.status === 200) {
-        alert('House added successfully');
-        router.push('/homeowner/house');
-      } else if (res instanceof Error) {
-        alert('Failed to add house');
-      }
+      alert('House added successfully');
+      router.push('/homeowner/house');
     } catch (error) {
       console.log(error);
+      alert('Failed to add house');
     } finally {
       setLoading(false);
     }

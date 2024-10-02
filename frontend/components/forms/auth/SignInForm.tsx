@@ -1,8 +1,9 @@
 'use client';
 import Link from 'next/link';
-import Input from '../../ui/custom/Input';
+import { Input } from '../../ui/input';
 import { Button } from '../../ui/button';
 import { SignInFormData } from '@/patterns/boundary/SignInFormBoundary';
+import { Label } from '@/components/ui/label';
 
 type Props = {
   data: SignInFormData;
@@ -18,25 +19,35 @@ export default function SignInForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className='flex w-full flex-col gap-4 bg-gray-50 p-16 rounded-lg shadow-2xl'
+      className='flex flex-col w-full p-16 md:w-1/2 xl:w-1/3 gap-4 rounded-lg'
     >
-      <h1 className='text-2xl mb-4'>TMS</h1>
-      <Input
-        type='email'
-        value={credentials.email}
-        onChange={(e) =>
-          setCredentials({ ...credentials, email: e.target.value })
-        }
-        placeholder='Email'
-      />
-      <Input
-        type='password'
-        value={credentials.password}
-        onChange={(e) =>
-          setCredentials({ ...credentials, password: e.target.value })
-        }
-        placeholder='Password'
-      />
+      <h1 className='text-2xl mb-4'>Sign in to TMS</h1>
+      <div className='relative'>
+        <Input
+          name='email'
+          id='email'
+          type='email'
+          value={credentials.email}
+          onChange={(e) =>
+            setCredentials({ ...credentials, email: e.target.value })
+          }
+          placeholder='Email'
+        />
+        <Label htmlFor='address'>Address</Label>
+      </div>
+      <div className='relative'>
+        <Input
+          name='password'
+          id='password'
+          type='password'
+          value={credentials.password}
+          onChange={(e) =>
+            setCredentials({ ...credentials, password: e.target.value })
+          }
+          placeholder='Password'
+        />
+        <Label htmlFor='password'>Password</Label>
+      </div>
       <Button onClick={handleSubmit}>Sign In</Button>
       <span>
         Don't have an account?

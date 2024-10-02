@@ -32,48 +32,48 @@ export default class HouseEntity {
   }
 
 
-  static readonly getHouse = async (houseId: string): Promise<AxiosResponse<any> | Error> => {
+  static readonly getHouse = async (houseId: string): Promise<House> => {
     try {
       const res = await axios.get(`/houses/${houseId}`);
-      return res;
+      return res.data;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to fetch houses');
     }
   }
 
-  static readonly deleteHouse = async (houseId: string): Promise<AxiosResponse<any> | Error> => {
+  static readonly deleteHouse = async (houseId: string): Promise<string> => {
     try {
       const res = await axios.delete(`/houses/${houseId}`);
-      return res;
+      return res.data.message;
     } catch (error: any) {
-      return error;
+      throw new Error('Failed to delete houses');
     }
   }
 
-  static readonly addHouse = async (data: HouseFormData): Promise<AxiosResponse<any> | Error> => {
+  static readonly addHouse = async (data: HouseFormData): Promise<string> => {
     try {
       const res = await axios.post('/houses', data);
-      return res;
+      return res.data.message;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to add houses');
     }
   }
 
-  static readonly updateHouse = async (houseId: string, data: HouseFormData): Promise<AxiosResponse<any> | Error> => {
+  static readonly updateHouse = async (houseId: string, data: HouseFormData): Promise<string> => {
     try {
       const res = await axios.put(`/houses/${houseId}`, data);
-      return res;
+      return res.data.message;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to update houses');
     }
   }
 
-  static readonly getHousesByOwner = async (ownerId: string): Promise<AxiosResponse<any> | Error> => {
+  static readonly getHousesByOwner = async (ownerId: string): Promise<House[]> => {
     try {
-      const res = await axios.get(`/houses/owner/${ownerId}`);
-      return res;
+      const res = await axios.get(`/houses?id=${ownerId}`);
+      return res.data;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to fetch houses');
     }
   }
 

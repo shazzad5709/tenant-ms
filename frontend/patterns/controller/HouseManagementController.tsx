@@ -4,17 +4,17 @@ import { User } from '@/context/UserContext';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import HouseEntity, { House } from '../entity/House';
+import { InfinitySpin } from 'react-loader-spinner';
+import { Button } from '@/components/ui/button';
 
 type Props = {
   user: User | null;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function HouseManagementController({
-  user,
-  setLoading,
-}: Readonly<Props>) {
+export default function HouseManagementController({ user }: Readonly<Props>) {
   const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
 
   const [houses, setHouses] = useState<House[]>([]);
 
@@ -23,11 +23,10 @@ export default function HouseManagementController({
     if (!user?.id) return;
 
     try {
-      const res = await HouseEntity.getHouses();
+      const res = await HouseEntity.getHousesByOwner(user.id);
       console.log('Controller: ', res);
 
       const houses: House[] = res;
-      // console.log(houses);
       setHouses(houses);
     } catch (error) {
       console.log(error);
@@ -41,18 +40,14 @@ export default function HouseManagementController({
     router.push(`/homeowner/house/update?id=${houseId}`);
   };
 
-  const onDeleteClickedEvent = (houseId: string) => {
+  const onDeleteClickedEvent = async (houseId: string) => {
     try {
       setLoading(true); // Start loading
-      const res = HouseEntity.deleteHouse(houseId);
-      if ('status' in res && res.status === 200) {
-        alert('House deleted successfully');
-        fetchAllHouses();
-      } else if (res instanceof Error) {
-        alert(res.message);
-      }
+      const res = await HouseEntity.deleteHouse(houseId);
+      alert(res);
+      fetchAllHouses();
     } catch (error) {
-      console.log(error);
+      alert(error);
     } finally {
       setLoading(false); // End loading
     }
@@ -65,6 +60,23 @@ export default function HouseManagementController({
       fetchAllHouses();
     }
   }, [user]);
+
+  if (loading) {
+    return (
+      <div className='flex justify-center items-center h-screen'>
+        <InfinitySpin color='#00BFFF' />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        Unauthorized
+        <Button onClick={() => router.push('/login')}>Sign In</Button>
+      </div>
+    );
+  }
 
   return (
     <div>

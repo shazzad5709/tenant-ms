@@ -17,7 +17,9 @@ export const SignInControl: React.FC<Props> = ({}) => {
   const [status, setStatus] = useState<string>('');
 
   useEffect(() => {
-    alert(status);
+    if (status.length > 0) {
+      alert(status);
+    }
   }, [status]);
 
   const signInClickedEvent = async (data: SignInFormData) => {
@@ -47,8 +49,6 @@ export const SignInControl: React.FC<Props> = ({}) => {
       alert(error);
     }
   };
-
-  // if (user?.id) router.push(`/${user.role}?id=${user.id}`);
 
   return <SignInFormBoundary signIn={signInClickedEvent} />;
 };

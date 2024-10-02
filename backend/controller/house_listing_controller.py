@@ -73,6 +73,24 @@ class HouseListingController:
       print(str(e))
       raise HTTPException(status_code=400, detail=str(e))
 
+  async def updateHouse(self, id: str, house: HouseBoundary) -> ResponseModel:
+    try:
+      await db["house"].update_one({"_id": ObjectId(id)}, {"$set": house.dict()})
+      return ResponseModel(message="House updated successfully")
+
+    except Exception as e:
+      print(str(e))
+      raise HTTPException(status_code=400, detail=str(e))
+
+  async def deleteHouse(self, id: str) -> ResponseModel:
+    try:
+      await db["house"].delete_one({"_id": ObjectId(id)})
+      return ResponseModel(message="House deleted successfully")
+
+    except Exception as e:
+      print(str(e))
+      raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.get("/", response_model=list[HouseEntity])
 async def fetch_houses(
@@ -98,3 +116,19 @@ async def add_house(
   controller: HouseListingController = Depends(HouseListingController),
 ):
   return await controller.addHouse(house)
+
+
+@router.put("/{id}", response_model=ResponseModel)
+async def update_house(
+  id: str,
+  house: HouseBoundary,
+  controller: HouseListingController = Depends(HouseListingController),
+):
+  return await controller.updateHouse(id, house)
+
+
+@router.delete("/{id}", response_model=ResponseModel)
+async def delete_house(
+  id: str, controller: HouseListingController = Depends(HouseListingController)
+):
+  return await controller.deleteHouse(id)
