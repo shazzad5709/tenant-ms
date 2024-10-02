@@ -3,18 +3,16 @@ import { User } from '@/context/UserContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import BillEntity, { Bill } from '../entity/Bill';
+import BillList from '@/components/interface/BillList';
 
 type Props = {
   user: User | null;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const BillListingController: React.FC<Props> = ({
-  user,
-  setLoading,
-}) => {
+export const BillListingController: React.FC<Props> = ({ user }) => {
   const router = useRouter();
   const [bills, setBills] = useState<Bill[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchAllBills = async () => {
     if (!user?.id) return; // Only fetch when user is available
@@ -41,7 +39,7 @@ export const BillListingController: React.FC<Props> = ({
     }
   }, [user]);
 
-  if (user?.role !== 'Tenant') {
+  if (user?.role !== 'tenant' && user?.role !== 'homeowner') {
     return <div>Unauthorized</div>;
   }
 

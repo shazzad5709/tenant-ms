@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import BillForm from '@/components/forms/bill/AddBillForm';
 import useUser from '@/hooks/useUser';
 
@@ -27,9 +27,9 @@ export const AddBillFormBoundary: React.FC<AddBillFormBoundaryProps> = ({
   const { user } = useUser();
 
   const [data, setData] = useState<BillFormData>({
-    issuer: user ? user.name : '',
+    issuer: '',
     issuedTo: '',
-    billDate: null,
+    billDate: new Date(),
     dueDate: null,
     amount: 0,
     status: 'pending',
@@ -37,9 +37,19 @@ export const AddBillFormBoundary: React.FC<AddBillFormBoundaryProps> = ({
     billingPeriodFrom: null,
     billingPeriodTo: null,
     description: '',
-    issuerId: user ? user.id : '',
+    issuerId: '',
     issuedToId: '',
   });
+
+  useEffect(() => {
+    if (user) {
+      setData({
+        ...data,
+        issuer: user.name,
+        issuerId: user.id,
+      });
+    }
+  }, [user]);
 
   const handleSubmit = (event: any) => {
     event.preventDefault();

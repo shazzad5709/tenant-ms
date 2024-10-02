@@ -37,7 +37,7 @@ export default class HouseEntity {
       const res = await axios.get(`/houses/${houseId}`);
       return res.data;
     } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Failed to fetch houses');
+      throw new Error(error.response?.data?.message || 'Failed to fetch house');
     }
   }
 
@@ -46,7 +46,7 @@ export default class HouseEntity {
       const res = await axios.delete(`/houses/${houseId}`);
       return res.data.message;
     } catch (error: any) {
-      throw new Error('Failed to delete houses');
+      throw new Error('Failed to delete house');
     }
   }
 
@@ -55,7 +55,7 @@ export default class HouseEntity {
       const res = await axios.post('/houses', data);
       return res.data.message;
     } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Failed to add houses');
+      throw new Error(error.response?.data?.message || 'Failed to add house');
     }
   }
 
@@ -64,7 +64,7 @@ export default class HouseEntity {
       const res = await axios.put(`/houses/${houseId}`, data);
       return res.data.message;
     } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Failed to update houses');
+      throw new Error(error.response?.data?.message || 'Failed to update house');
     }
   }
 

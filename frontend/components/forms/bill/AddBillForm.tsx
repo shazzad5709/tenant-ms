@@ -1,8 +1,9 @@
 'use client';
 import { useState } from 'react';
-import Input from '../../ui/custom/Input';
+import { Input } from '../../ui/input';
 import { Button } from '../../ui/button';
 import { BillFormData } from '@/patterns/boundary/AddBillFormBoundary';
+import { Label } from '@/components/ui/label';
 
 type Props = {
   label: string;
@@ -25,64 +26,120 @@ export default function BillForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className='flex flex-col gap-4 bg-gray-50 p-16 rounded-lg shadow-2xl'
+      className='flex flex-col gap-4 p-16 lg:px-48 rounded-lg'
     >
-      <h1 className='text-2xl mb-4'>TMS</h1>
-      <Input
-        type='date'
-        value={dateToString(data.billDate)}
-        onChange={(e) =>
-          setData({ ...data, billDate: new Date(e.target.value) })
-        }
-        placeholder='Service Name'
-      />
-      <Input
-        type='date'
-        value={dateToString(data.dueDate)}
-        onChange={(e) =>
-          setData({ ...data, dueDate: new Date(e.target.value) })
-        }
-        placeholder='Service Name'
-      />
-      <div>
-        <label htmlFor='billingPeriod' className='pl-2 text-xs text-gray-700'>
-          Bill Starts From
-        </label>
-        <Input
-          type='date'
-          id='billingPeriod'
-          value={dateToString(data.billingPeriodFrom)}
-          onChange={(e) =>
-            setData({ ...data, billingPeriodFrom: new Date(e.target.value) })
-          }
-          placeholder='Billing Period From'
-        />
-        <label htmlFor='billingPeriodEnd'>To</label>
-        <Input
-          type='date'
-          id='billingPeriodEnd'
-          value={dateToString(data.billingPeriodTo)}
-          onChange={(e) =>
-            setData({ ...data, billingPeriodTo: new Date(e.target.value) })
-          }
-          placeholder='To'
-        />
+      <h1 className='text-2xl'>
+        Issuer: <span className='font-bold'>{data.issuer}</span>
+      </h1>
+      <p className='text-gray-700'>Provide the following information</p>
+      <div className='flex gap-4'>
+        <div className='relative w-full'>
+          <Input
+            type='date'
+            id='billDate'
+            name='billDate'
+            disabled
+            value={dateToString(data.billDate)}
+            onChange={(e) =>
+              setData({ ...data, billDate: new Date(e.target.value) })
+            }
+            placeholder=' '
+          />
+          <Label htmlFor='billDate'>Bill Date</Label>
+        </div>
+
+        <div className='relative w-full'>
+          <Input
+            type='date'
+            value={dateToString(data.dueDate)}
+            onChange={(e) =>
+              setData({ ...data, dueDate: new Date(e.target.value) })
+            }
+            placeholder=' '
+          />
+          <Label htmlFor='dueDate'>Due Date</Label>
+        </div>
       </div>
-      <div>
-        <label htmlFor='amount' className='pl-2 text-xs text-gray-700'>
-          Service Charge
-        </label>
+      <div className='flex gap-4'>
+        <div className='relative w-full'>
+          <Input
+            type='text'
+            id='issuedTo'
+            name='issuedTo'
+            value={data.issuedTo}
+            onChange={(e) => setData({ ...data, issuedTo: e.target.value })}
+            placeholder=' '
+          />
+          <Label htmlFor='issuedTo'>Issued To</Label>
+        </div>
+        <div className='relative w-full'>
+          <Input
+            type='text'
+            id='issuedToId'
+            name='issuedToId'
+            value={data.issuedToId}
+            onChange={(e) => setData({ ...data, issuedToId: e.target.value })}
+            placeholder=' '
+          />
+          <Label htmlFor='issuedToId'>ID</Label>
+        </div>
+      </div>
+      <div className='relative w-full'>
+        <Input
+          type='text'
+          id='description'
+          name='description'
+          value={data.description}
+          onChange={(e) => setData({ ...data, description: e.target.value })}
+          placeholder=' '
+        />
+        <Label htmlFor='description'>Description</Label>
+      </div>
+      <div className='flex gap-4'>
+        <div className='relative w-full'>
+          <Input
+            type='date'
+            id='billingPeriodFrom'
+            name='billingPeriodFrom'
+            value={dateToString(data.billingPeriodFrom)}
+            onChange={(e) =>
+              setData({ ...data, billingPeriodFrom: new Date(e.target.value) })
+            }
+            placeholder=' '
+          />
+          <Label htmlFor='billingPeriodFrom'>Billing Period From</Label>
+        </div>
+
+        <div className='relative w-full'>
+          <Input
+            type='date'
+            id='billingPeriodTo'
+            name='billingPeriodTo'
+            value={dateToString(data.billingPeriodTo)}
+            onChange={(e) =>
+              setData({ ...data, billingPeriodTo: new Date(e.target.value) })
+            }
+            placeholder=' '
+          />
+          <Label htmlFor='billingPeriodTo'>Billing Period To</Label>
+        </div>
+      </div>
+      <div className='relative w-full'>
         <Input
           name='amount'
           type='number'
+          id='amount'
           value={data.amount.toString()}
           onChange={(e) =>
             setData({ ...data, amount: parseFloat(e.target.value) })
           }
-          placeholder='Amount'
+          placeholder=' '
         />
+        <Label htmlFor='amount'>Amount</Label>
       </div>
-      <Button>{label}</Button>
+      <div className='flex justify-end'>
+        <Button>{label}</Button>
+      </div>
     </form>
   );
 }

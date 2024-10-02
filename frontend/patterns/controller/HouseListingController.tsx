@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import HouseList from '@/components/interface/HouseList';
 import { User } from '@/context/UserContext';
 import { useRouter } from 'next/navigation';

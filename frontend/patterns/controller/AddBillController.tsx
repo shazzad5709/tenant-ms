@@ -33,7 +33,7 @@ export const AddBillController: React.FC<Props> = ({ loading, setLoading }) => {
     }
   };
 
-  if (user?.role !== 'Homeowner') {
+  if (user?.role !== 'homeowner') {
     return <div>Unauthorized</div>;
   }
 

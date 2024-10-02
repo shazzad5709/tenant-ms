@@ -9,24 +9,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
-
-type House = {
-  id: string;
-  address: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  image: string;
-  type: string;
-  floorspace: number;
-  beds: number;
-  baths: number;
-  price: number;
-  owner: string;
-  ownerId: string;
-  parking: number;
-  phoneNumber: string;
-};
+import { House } from '@/patterns/entity/House';
 
 type Props = {
   houses: House[];

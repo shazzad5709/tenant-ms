@@ -20,66 +20,66 @@ export type Bill = {
 
 export default class BillEntity {
 
-  static readonly getBills = async (): Promise<AxiosResponse<any> | Error> => {
+  static readonly getBills = async (): Promise<Bill[]> => {
     try {
       const res = await axios.get('/bills');
-      return res;
+      return res.data;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to fetch bills');
     }
   }
 
-  static readonly getBill = async (billId: string): Promise<AxiosResponse<any> | Error> => {
+  static readonly getBill = async (billId: string): Promise<Bill> => {
     try {
       const res = await axios.get(`/bills/${billId}`);
-      return res;
+      return res.data;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to fetch bill');
     }
   }
 
-  static readonly deleteBill = async (billId: string): Promise<AxiosResponse<any> | Error> => {
+  static readonly deleteBill = async (billId: string): Promise<string> => {
     try {
       const res = await axios.delete(`/bills/${billId}`);
-      return res;
+      return res.data.message;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to delete bill');
     }
   }
 
-  static readonly addBill = async (data: BillFormData): Promise<AxiosResponse<any> | Error> => {
+  static readonly addBill = async (data: BillFormData): Promise<string> => {
     try {
       const res = await axios.post('/bills', data);
-      return res;
+      return res.data.message;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to add bill');
     }
   }
 
-  static readonly updateBill = async (billId: string, data: BillFormData): Promise<AxiosResponse<any> | Error> => {
+  static readonly updateBill = async (billId: string, data: BillFormData): Promise<string> => {
     try {
       const res = await axios.put(`/bills/${billId}`, data);
-      return res;
+      return res.data.message;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to update bill');
     }
   }
 
-  static readonly getBillsByOwner = async (ownerId: string): Promise<AxiosResponse<any> | Error> => {
+  static readonly getBillsByOwner = async (ownerId: string): Promise<Bill[]> => {
     try {
       const res = await axios.get(`/bills/owner/${ownerId}`);
-      return res;
+      return res.data;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to fetch bills');
     }
   }
 
-  static readonly getBillsByTenant = async (tenantId: string): Promise<AxiosResponse<any> | Error> => {
+  static readonly getBillsByTenant = async (tenantId: string): Promise<Bill[]> => {
     try {
       const res = await axios.get(`/bills/tenant/${tenantId}`);
-      return res;
+      return res.data;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to fetch bills');
     }
   }
 

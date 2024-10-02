@@ -5,6 +5,7 @@ from starlette.middleware.cors import CORSMiddleware
 from controller.sign_up_controller import router as sign_up_router
 from controller.sign_in_controller import router as sign_in_router
 from controller.house_listing_controller import router as house_listing_router
+from entity.bill_entity import router as bill_router
 
 app = FastAPI()
 
@@ -26,6 +27,7 @@ app.add_middleware(
 app.include_router(sign_up_router, prefix="/auth", tags=["auth"])
 app.include_router(sign_in_router, prefix="/auth", tags=["auth"])
 app.include_router(house_listing_router, prefix="/houses", tags=["houses"])
+app.include_router(bill_router, prefix="/bills", tags=["bills"])
 
 
 @app.get("/")
