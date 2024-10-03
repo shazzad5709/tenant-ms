@@ -1,7 +1,7 @@
-fastapi
-uvicorn
-pydantic
-pymongo>=4.5
+fastapi=0.112.1
+uvicorn=0.30.6
+pydantic=1.10.17
+pymongo=4.8.0
 pymongo[srv]
 motor>=3.3
 passlib
