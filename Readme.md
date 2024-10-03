@@ -36,9 +36,9 @@ npm run dev
 ```
 
 On a new terminal, run the following commands for the backend.
-cd backend
 
 ```
+cd backend
 .venv\Scripts\Activate.ps1
 uvicorn main:app --reload
 ```

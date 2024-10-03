@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from fastapi import HTTPException, APIRouter, Depends
-from ..config import db
+from config import db
 from bson import ObjectId
 
 
