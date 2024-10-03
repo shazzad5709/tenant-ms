@@ -31,9 +31,9 @@ export default function SignInForm({
           onChange={(e) =>
             setCredentials({ ...credentials, email: e.target.value })
           }
-          placeholder='Email'
+          placeholder=' '
         />
-        <Label htmlFor='address'>Address</Label>
+        <Label htmlFor='email'>Email</Label>
       </div>
       <div className='relative'>
         <Input
@@ -44,7 +44,7 @@ export default function SignInForm({
           onChange={(e) =>
             setCredentials({ ...credentials, password: e.target.value })
           }
-          placeholder='Password'
+          placeholder=' '
         />
         <Label htmlFor='password'>Password</Label>
       </div>
