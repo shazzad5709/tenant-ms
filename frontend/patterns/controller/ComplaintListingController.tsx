@@ -2,19 +2,18 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { User } from '@/context/UserContext';
-import ComplaintEntity, { Complaint } from '../entity/Complaint';
+import { ComplaintEntity, Complaint } from '../entity/Complaint';
+import { InfinitySpin } from 'react-loader-spinner';
+import ComplaintList from '@/components/interface/ComplaintList';
 
 type Props = {
   user: User | null;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const ComplaintListingController: React.FC<Props> = ({
-  user,
-  setLoading,
-}) => {
+export const ComplaintListingController: React.FC<Props> = ({ user }) => {
   const router = useRouter();
   const [complaints, setComplaints] = useState<Complaint[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchComplaints = async () => {
     if (!user?.id) return; // Only fetch when user is available
@@ -22,13 +21,10 @@ export const ComplaintListingController: React.FC<Props> = ({
     try {
       setLoading(true); // Start loading
       const res = await ComplaintEntity.getComplaintsByOwner(user.id);
-      if ('status' in res && res.status === 200) {
-        setComplaints(res.data);
-      } else if (res instanceof Error) {
-        alert('Failed to fetch complaints');
-      }
+      setComplaints(res);
     } catch (error) {
       console.log(error);
+      alert('Failed to fetch complaints');
     } finally {
       setLoading(false); // End loading
     }
@@ -41,32 +37,38 @@ export const ComplaintListingController: React.FC<Props> = ({
     }
   }, [user]);
 
-  const markAsResolved = (complaintId: string) => {
+  const onMarkAsResolvedClicked = async (complaintId: string) => {
     try {
       setLoading(true); // Start loading
-      const res = ComplaintEntity.markAsResolved(complaintId);
-      if ('status' in res && res.status === 200) {
-        alert('Complaint marked as resolved');
-        fetchComplaints();
-      } else if (res instanceof Error) {
-        alert(res.message);
-      }
+      const res = await ComplaintEntity.markAsResolved(complaintId);
+      alert('Complaint marked as resolved');
+      fetchComplaints();
     } catch (error) {
       console.log(error);
+      alert('Failed to mark as resolved');
     } finally {
       setLoading(false); // End loading
     }
   };
 
-  if (user?.role !== 'Homeowner') {
+  if (user?.role !== 'homeowner') {
     return <div>Unauthorized</div>;
+  }
+
+  if (loading) {
+    return (
+      <div className='flex justify-center items-center h-screen'>
+        <InfinitySpin color='#000000' />
+      </div>
+    );
   }
 
   return (
     <ComplaintList
       complaints={complaints}
+      owner={user.name}
       role='homeowner'
-      markAsResolved={markAsResolved}
+      onMarkAsResolvedClicked={onMarkAsResolvedClicked}
     />
   );
 };

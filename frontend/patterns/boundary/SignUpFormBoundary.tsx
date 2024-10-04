@@ -23,36 +23,35 @@ type SignUpFormBoundaryProps = {
 export const SignUpFormBoundary: React.FC<SignUpFormBoundaryProps> = ({
   signUp,
 }) => {
-  const [data, setData] = useState<SignUpFormData>({
-    firstName: '',
-    lastName: '',
-    username: '',
-    email: '',
-    password: '',
-    phoneNumber: '',
-    passportID: '',
-    houseStreetNumber: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    role: 'homeowner',
-  });
-
-  // mock data
   // const [data, setData] = useState<SignUpFormData>({
-  //   firstName: 'John',
-  //   lastName: 'Doe',
-  //   username: 'johndoe',
-  //   email: 'john@doe.com',
-  //   password: 'johndoe',
-  //   phoneNumber: '0812345679',
-  //   passportID: 'A12345678',
-  //   houseStreetNumber: '1674 Rocky Mountain Ave',
-  //   city: 'Milpitas',
-  //   state: 'CA',
-  //   zipCode: '95035',
-  //   role: 'Homeowner',
+  //   firstName: '',
+  //   lastName: '',
+  //   username: '',
+  //   email: '',
+  //   password: '',
+  //   phoneNumber: '',
+  //   passportID: '',
+  //   houseStreetNumber: '',
+  //   city: '',
+  //   state: '',
+  //   zipCode: '',
+  //   role: 'homeowner',
   // });
+
+  const [data, setData] = useState<SignUpFormData>({
+    firstName: 'Alice',
+    lastName: 'Davis',
+    username: 'alicedavis',
+    email: 'alice@davis.com',
+    password: 'alicedavis',
+    phoneNumber: '0812345682',
+    passportID: 'D23456789',
+    houseStreetNumber: '520 Oak Lane',
+    city: 'Santa Clara',
+    state: 'CA',
+    zipCode: '95050',
+    role: 'tenant',
+  });
 
   // useEffect(() => {
   //   console.log('Current data state:', data);

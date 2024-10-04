@@ -5,7 +5,7 @@ import {
 } from '../boundary/AddHouseFormBoundary';
 import { useRouter } from 'next/navigation';
 import useUser from '@/hooks/useUser';
-import HouseEntity from '../entity/House';
+import {HouseEntity} from '../entity/House';
 
 type Props = {
   loading: boolean;

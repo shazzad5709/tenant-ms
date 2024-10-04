@@ -8,7 +8,7 @@ export type Notification = {
   isRead: boolean;
 };
 
-export default class NotificationEntity {
+export class NotificationEntity {
 
   static readonly getNotifications = async (userId: string): Promise<AxiosResponse<any> | Error> => {
     try {

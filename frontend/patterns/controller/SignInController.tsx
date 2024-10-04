@@ -6,8 +6,9 @@ import {
 } from '../boundary/SignInFormBoundary';
 import { useEffect, useState } from 'react';
 import useUser from '@/hooks/useUser';
-import UserEntity from '../entity/User';
+import { UserEntity } from '../entity/User';
 import { User } from '@/context/UserContext';
+import { InfinitySpin } from 'react-loader-spinner';
 
 type Props = {};
 
@@ -15,6 +16,7 @@ export const SignInControl: React.FC<Props> = ({}) => {
   const router = useRouter();
   const { user, updateUser } = useUser();
   const [status, setStatus] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (status.length > 0) {
@@ -24,6 +26,7 @@ export const SignInControl: React.FC<Props> = ({}) => {
 
   const signInClickedEvent = async (data: SignInFormData) => {
     try {
+      setLoading(true);
       const res = await UserEntity.signIn(data);
       console.log('Controller: ', res);
 
@@ -47,8 +50,19 @@ export const SignInControl: React.FC<Props> = ({}) => {
       }
     } catch (error) {
       alert(error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (user) router.push(`/${user.role}?id=${user.id}`);
+
+  if (loading)
+    return (
+      <div className='absolute inset-0 bg-white h-screen flex items-center justify-center text-xl'>
+        <InfinitySpin color='black' />
+      </div>
+    );
 
   return <SignInFormBoundary signIn={signInClickedEvent} />;
 };

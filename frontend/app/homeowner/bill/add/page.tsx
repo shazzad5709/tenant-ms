@@ -3,26 +3,14 @@ import Navbar from '@/components/ui/navbar';
 import { AddBillController } from '@/patterns/controller/AddBillController';
 import React, { useState } from 'react';
 import { InfinitySpin } from 'react-loader-spinner';
+import { navbarItems } from '../../page';
 
 type Props = {};
 
 export default function AddBillPage({}: Props) {
   const [loading, setLoading] = useState(false);
 
-  const navbarItems = [
-    {
-      name: 'Houses',
-      href: `/homeowner/house`,
-    },
-    {
-      name: 'Bills',
-      href: `/homeowner/bill`,
-    },
-    {
-      name: 'Services',
-      href: `/homeowner/service`,
-    },
-  ];
+ 
 
   if (loading) {
     return (

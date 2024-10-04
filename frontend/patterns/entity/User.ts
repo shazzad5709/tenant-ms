@@ -5,24 +5,24 @@ import { AxiosResponse } from "axios";
 import { User } from "@/context/UserContext";
 
 
-export default class UserEntity {
+export class UserEntity {
 
-  static readonly signUp = async (user: SignUpFormData): Promise<AxiosResponse<any> | Error> => {
+  static readonly signUp = async (user: SignUpFormData): Promise<User> => {
     try {
       const res = await axios.post('/auth/signup', user);
-      return res;
+      return res.data;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'An error occurred');
     }
   }
 
-  static readonly signIn = async (user: SignInFormData): Promise<User | Error> => {
+  static readonly signIn = async (user: SignInFormData): Promise<User> => {
     try {
       const res = await axios.post('/auth/signin', user);
       console.log('Entity: ', res.data);
       return res.data;
     } catch (error: any) {
-      return new Error(error.response?.data?.message || 'An error occurred');
+      throw new Error(error.response?.data?.message || 'An error occurred');
     }
   }
 

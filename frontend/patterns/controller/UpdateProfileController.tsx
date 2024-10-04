@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { UpdateProfileFormBoundary } from '../boundary/UpdateProfileFormBoundary';
 import useUser from '@/hooks/useUser';
-import UserEntity from '../entity/User';
+import { UserEntity } from '../entity/User';
 
 export const UpdateProfileController: React.FC<Props> = ({ userId }) => {
   const [error, setError] = useState<string>('');

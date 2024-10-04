@@ -1,33 +1,21 @@
 'use client';
 import Navbar from '@/components/ui/navbar';
 import useUser from '@/hooks/useUser';
+import { UpdateBillController } from '@/patterns/controller/UpdateBillController';
 import { UpdateHouseController } from '@/patterns/controller/UpdateHouseController';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 import { InfinitySpin } from 'react-loader-spinner';
+import { navbarItems } from '../../page';
 
 type Props = {};
 
-export default function AddHousePage({}: Props) {
+export default function UpdateBillPage({}: Props) {
   const [loading, setLoading] = useState(false);
 
   const searchParams = useSearchParams();
-  const houseId = searchParams.get('id');
+  const billId = searchParams.get('id');
 
-  const navbarItems = [
-    {
-      name: 'Houses',
-      href: `/homeowner/house`,
-    },
-    {
-      name: 'Bills',
-      href: `/homeowner/bill`,
-    },
-    {
-      name: 'Services',
-      href: `/homeowner/service`,
-    },
-  ];
 
   if (loading) {
     return (
@@ -39,11 +27,10 @@ export default function AddHousePage({}: Props) {
 
   return (
     <div className='flex flex-col p-8'>
-      <Navbar navbarItems={navbarItems} current='houses' />
+      <Navbar navbarItems={navbarItems} current='bills' />
 
-      {/* Add house controller */}
       <div>
-        <UpdateHouseController houseId={houseId ?? ''} />
+        <UpdateBillController billId={billId ?? ''} />
       </div>
     </div>
   );

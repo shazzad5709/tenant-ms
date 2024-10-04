@@ -1,39 +1,104 @@
-import { useState } from 'react';
-import { ApplicationBoundary } from '../boundary/ApplicationBoundary';
-import { useRouter } from 'next/router';
-import UserEntity from '../entity/User';
+'use client';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { UserEntity } from '../entity/User';
+import ApprovalInterface from '@/components/interface/ApprovalInterface';
+import useUser from '@/hooks/useUser';
+import { Tenant, TenantEntity } from '../entity/Tenant';
+import { Application, ApplicationEntity } from '../entity/Application';
+import Loading from '@/components/ui/custom/Loading';
 
 type Props = {};
 
+export type ApplicationData = {
+  application: Application;
+  tenant: Tenant;
+};
+
 export const ApplicationController: React.FC<Props> = ({}) => {
-  const [error, setError] = useState<string>('');
   const router = useRouter();
-  const user = useUser();
+  const { user } = useUser();
 
-  const onAcceptClickedEvent = (applicantId: string) => {
-    const applicant = UserEntity.find((user) => user.id === applicantId);
-    applicant.role = 'Homeowner';
-    const tenant = new Homeowner(applicant);
+  const [applications, setApplications] = useState<ApplicationData[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchApplicants = async () => {
+    if (!user) return;
+
+    try {
+      setLoading(true);
+      const applications = await ApplicationEntity.getApplicationByOwnerId(
+        user.id
+      );
+      let applicants: ApplicationData[] = [];
+      for (let application of applications) {
+        const res = await TenantEntity.getTenantById(application.tenantId);
+        const applicationWithTenant: ApplicationData = {
+          application: application,
+          tenant: res,
+        };
+
+        applicants.push(applicationWithTenant);
+      }
+
+      setApplications(applicants);
+    } catch (error) {
+      console.log(error);
+      alert('Error');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const onRejectClickedEvent = (applicantId: string) => {
-    UserEntity.remove((user) => user.id === applicantId);
+  const onAcceptClickedEvent = async (application: ApplicationData) => {
+    try {
+      setLoading(true);
+      const res = await ApplicationEntity.updateApplication(application);
+      alert('Application accepted');
+      fetchApplicants();
+    } catch (error) {
+      console.log(error);
+      alert('Error accepting application');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+  const onRejectClickedEvent = async (application: Application) => {
+    try {
+      setLoading(true);
+      const res = await ApplicationEntity.deleteApplication(application.id);
+      alert('Application rejected');
+      fetchApplicants();
+    } catch (error) {
+      console.log(error);
+      alert('Error rejecting application');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  if (!user) router.push('/signin');
+  useEffect(() => {
+    if (user) {
+      fetchApplicants();
+    }
+  }, [user]);
 
-  if (user.role !== 'Admin') {
+  // useEffect(() => {
+  //   console.log(applicants);
+  // }, [applicants]);
+
+  if (user?.role !== 'homeowner') {
     return <div>Unauthorized</div>;
   }
 
+  if (loading) return <Loading />;
+
   return (
-    <ApplicationBoundary
-      accept={onAcceptClickedEvent}
-      reject={onRejectClickedEvent}
+    <ApprovalInterface
+      applications={applications}
+      onAcceptClicked={onAcceptClickedEvent}
+      onRejectClicked={onRejectClickedEvent}
     />
   );
 };

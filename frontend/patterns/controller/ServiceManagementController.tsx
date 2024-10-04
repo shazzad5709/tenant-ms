@@ -1,21 +1,18 @@
 'use client';
-import ServiceList from '@/components/interface/HouseList';
+import ServiceList from '@/components/interface/ServiceList';
 import { User } from '@/context/UserContext';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import ServiceEntity, { Service } from '../entity/Service';
+import { ServiceEntity, Service } from '../entity/Service';
 
 type Props = {
   user: User | null;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function ServiceManagementController({
-  user,
-  setLoading,
-}: Readonly<Props>) {
+export default function ServiceManagementController({ user }: Readonly<Props>) {
   const router = useRouter();
 
+  const [loading, setLoading] = useState(false);
   const [services, setServices] = useState<Service[]>([]);
 
   const fetchAllServices = async () => {
@@ -25,13 +22,10 @@ export default function ServiceManagementController({
       setLoading(true); // Start loading
       const id = user?.id;
       const res = await ServiceEntity.getServicesByOwner(id);
-      if ('status' in res && res.status === 200) {
-        setServices(res.data);
-      } else if (res instanceof Error) {
-        alert('Failed to fetch services');
-      }
+      setServices(res);
     } catch (error) {
       console.log(error);
+      alert('Failed to fetch services');
     } finally {
       setLoading(false); // End loading
     }
@@ -41,16 +35,12 @@ export default function ServiceManagementController({
     router.push(`/homeowner/service/update?id=${serviceId}`);
   };
 
-  const onDeleteClickedEvent = (serviceId: string) => {
+  const onDeleteClickedEvent = async (serviceId: string) => {
     try {
       setLoading(true); // Start loading
-      const res = ServiceEntity.deleteService(serviceId);
-      if ('status' in res && res.status === 200) {
-        alert('Service deleted successfully');
-        fetchAllServices();
-      } else if (res instanceof Error) {
-        alert(res.message);
-      }
+      const res = await ServiceEntity.deleteService(serviceId);
+      alert(res);
+      fetchAllServices();
     } catch (error) {
       console.log(error);
     } finally {

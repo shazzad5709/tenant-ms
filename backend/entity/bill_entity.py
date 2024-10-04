@@ -38,7 +38,7 @@ class BillBoundary(BaseModel):
   issuerId: str
   issuedTo: str
   issuedToId: str
-  amount: int
+  amount: float
   description: str
   billDate: Optional[str] = None
   dueDate: Optional[str] = None
@@ -54,7 +54,7 @@ class BillEntity(BaseModel):
   issuerId: str
   issuedTo: str
   issuedToId: str
-  amount: int
+  amount: float
   description: str
   billDate: Optional[str] = None
   dueDate: Optional[str] = None
@@ -63,6 +63,8 @@ class BillEntity(BaseModel):
   billingPeriodFrom: Optional[str] = None
   billingPeriodTo: Optional[str] = None
 
+
+class BillController:
   async def addBill(self, bill: BillBoundary):
     try:
       await db["bill"].insert_one(bill.dict())
@@ -100,18 +102,16 @@ class BillEntity(BaseModel):
 
   async def fetchBillByOwnerId(self, ownerId: str):
     try:
-      bills = await db["bill"].find({"issuerId": ObjectId(ownerId)}).to_list(length=100)
-      return bills
+      bills = await db["bill"].find({"issuerId": ownerId}).to_list(length=100)
+      return [serialize_bill(bill) for bill in bills]
 
     except Exception as e:
       raise HTTPException(status_code=400, detail=str(e))
 
   async def fetchBillByTenantId(self, tenantId: str):
     try:
-      bills = (
-        await db["bill"].find({"issuedToId": ObjectId(tenantId)}).to_list(length=100)
-      )
-      return bills
+      bills = await db["bill"].find({"issuedToId": tenantId}).to_list(length=100)
+      return [serialize_bill(bill) for bill in bills]
 
     except Exception as e:
       raise HTTPException(status_code=400, detail=str(e))
@@ -119,42 +119,49 @@ class BillEntity(BaseModel):
   async def fetchAllBills(self):
     try:
       bills = await db["bill"].find().to_list(length=100)
-      return bills
+      return [serialize_bill(bill) for bill in bills]
     except Exception as e:
       raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.get("/", response_model=list[BillEntity])
-async def fetchBills(controller: BillEntity = Depends(BillEntity)):
-  return await controller.fetchBills()
+async def fetchBills(controller: BillController = Depends(BillController)):
+  return await controller.fetchAllBills()
+
+
+@router.get("/{id}", response_model=BillEntity)
+async def fetchBillById(id: str, controller: BillController = Depends(BillController)):
+  return await controller.fetchBillById(id)
 
 
 @router.get("/owner/{ownerId}", response_model=list[BillEntity])
 async def fetchBillByOwnerId(
-  ownerId: str, controller: BillEntity = Depends(BillEntity)
+  ownerId: str, controller: BillController = Depends(BillController)
 ):
   return await controller.fetchBillByOwnerId(ownerId)
 
 
 @router.get("/tenant/{tenantId}", response_model=list[BillEntity])
 async def fetchBillByTenantId(
-  tenantId: str, controller: BillEntity = Depends(BillEntity)
+  tenantId: str, controller: BillController = Depends(BillController)
 ):
   return await controller.fetchBillByTenantId(tenantId)
 
 
 @router.post("/", response_model=ResponseModel)
-async def addBill(bill: BillBoundary, controller: BillEntity = Depends(BillEntity)):
+async def addBill(
+  bill: BillBoundary, controller: BillController = Depends(BillController)
+):
   return await controller.addBill(bill)
 
 
 @router.put("/{id}", response_model=ResponseModel)
 async def updateBill(
-  id: str, bill: BillBoundary, controller: BillEntity = Depends(BillEntity)
+  id: str, bill: BillBoundary, controller: BillController = Depends(BillController)
 ):
   return await controller.updateBill(id, bill)
 
 
 @router.delete("/{id}", response_model=ResponseModel)
-async def deleteBill(id: str, controller: BillEntity = Depends(BillEntity)):
+async def deleteBill(id: str, controller: BillController = Depends(BillController)):
   return await controller.deleteBill(id)

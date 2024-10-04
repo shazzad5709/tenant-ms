@@ -1,11 +1,11 @@
 'use client';
-import HouseList from '@/components/interface/HouseList';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/ui/navbar';
 import useUser from '@/hooks/useUser';
 import HomeownerHouseManagementController from '@/patterns/controller/HouseManagementController';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { navbarItems } from '../page';
 
 type Props = {};
 
@@ -13,20 +13,7 @@ export default function House({}: Props) {
   const router = useRouter();
   const { user, updateUser } = useUser();
 
-  const navbarItems = [
-    {
-      name: 'Houses',
-      href: `/homeowner/house`,
-    },
-    {
-      name: 'Bills',
-      href: `/homeowner/bill`,
-    },
-    {
-      name: 'Services',
-      href: `/homeowner/service`,
-    },
-  ];
+  
 
   const onAddHouseClicked = () => {
     router.push('/homeowner/house/add');

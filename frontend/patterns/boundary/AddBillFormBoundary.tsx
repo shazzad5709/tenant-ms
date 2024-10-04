@@ -26,19 +26,35 @@ export const AddBillFormBoundary: React.FC<AddBillFormBoundaryProps> = ({
 }) => {
   const { user } = useUser();
 
+  // const [data, setData] = useState<BillFormData>({
+  //   issuer: '',
+  //   issuedTo: '',
+  //   billDate: new Date(),
+  //   dueDate: null,
+  //   amount: 0,
+  //   status: 'pending',
+  //   paymentDate: null,
+  //   billingPeriodFrom: null,
+  //   billingPeriodTo: null,
+  //   description: '',
+  //   issuerId: '',
+  //   issuedToId: '',
+  // });
+
+  //  mock data
   const [data, setData] = useState<BillFormData>({
     issuer: '',
-    issuedTo: '',
-    billDate: new Date(),
-    dueDate: null,
-    amount: 0,
-    status: 'pending',
-    paymentDate: null,
-    billingPeriodFrom: null,
-    billingPeriodTo: null,
-    description: '',
+    issuedTo: 'Alice Davis',
+    description: 'Electricity Bill',
     issuerId: '',
-    issuedToId: '',
+    issuedToId: '66ff44209ccb2df119fd97b2',
+    billDate: new Date('2024-09-15'),
+    dueDate: new Date('2024-10-01'),
+    amount: 120.5,
+    status: 'unpaid',
+    paymentDate: null,
+    billingPeriodFrom: new Date('2024-08-01'),
+    billingPeriodTo: new Date('2024-08-31'),
   });
 
   useEffect(() => {

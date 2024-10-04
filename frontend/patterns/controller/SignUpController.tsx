@@ -6,7 +6,8 @@ import {
   SignUpFormBoundary,
 } from '../boundary/SignUpFormBoundary';
 import useUser from '@/hooks/useUser';
-import UserEntity from '../entity/User';
+import { UserEntity } from '../entity/User';
+import { InfinitySpin } from 'react-loader-spinner';
 
 type Props = {};
 
@@ -15,6 +16,7 @@ export const SignUpController: React.FC<Props> = ({}) => {
   const { user } = useUser();
   const [error, setError] = useState<string[]>([]);
   const [status, setStatus] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   // useEffect(() => {
   //   // console.log(error);
@@ -23,33 +25,29 @@ export const SignUpController: React.FC<Props> = ({}) => {
   const signUpClickedEvent = async (data: SignUpFormData) => {
     const newErrors = isValidData(data);
 
-    // Check if there are errors immediately
     if (newErrors.length !== 0) {
-      setError(newErrors); // Set the error state
-      return; // Exit if there are errors
+      setError(newErrors);
+      return;
     }
 
     console.log('Data in controller: ', data);
 
     try {
+      setLoading(true);
       const res = await UserEntity.signUp(data);
 
-      if ('status' in res && res.status === 200) {
-        setStatus('User created successfully');
-        // console.log(status);
-        router.push('/login');
-      } else if (res instanceof Error) {
-        // console.log(res.message);
-      }
+      alert('Signed up successfully');
+      router.push('/login');
     } catch (error) {
-      // console.log(error);
+      console.log(error);
+      alert('Sign up failed');
+    } finally {
+      setLoading(false);
     }
   };
 
   const isValidData = (data: SignUpFormData): string[] => {
     const newErrors = [];
-
-    // if (!data.email) console.log('undefined email');
 
     if (
       !data.firstName ||
@@ -111,25 +109,34 @@ export const SignUpController: React.FC<Props> = ({}) => {
       newErrors.push('Last name must be at least 2 characters');
     }
 
-    // Update error state at once
     return newErrors;
   };
 
-  // if (user) router.push(`/${user.role}?id=${user.id}`);
+  // If a user is already logged in, redirect to their dashboard
+  if (user) router.push(`/${user.role}?id=${user.id}`);
+
+  if (loading)
+    return (
+      <div className='absolute inset-0 bg-white h-screen flex items-center justify-center text-xl'>
+        <InfinitySpin color='black' />
+      </div>
+    );
 
   return (
     <>
       <SignUpFormBoundary signUp={signUpClickedEvent} />
 
-      {error.length > 0 && (
-        <ul className='hidden'>
-          {error.map((err, idx) => (
-            <li key={idx}>{err}</li>
-          ))}
-        </ul>
-      )}
-
-      <p className='hidden'>{status}</p>
+      <div className='hidden text-white'>
+        {error.length > 0 && (
+          <ul>
+            {error.map((err, idx) => (
+              <li className='text-red-500' key={idx}>
+                {err}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </>
   );
 };

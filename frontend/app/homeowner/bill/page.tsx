@@ -2,9 +2,10 @@
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/ui/navbar';
 import useUser from '@/hooks/useUser';
-import { BillListingController } from '@/patterns/controller/BillListingController';
+import { BillManagementController } from '@/patterns/controller/BillManagementController';
 import { useRouter } from 'next/navigation';
 import React from 'react';
+import { navbarItems } from '../page';
 
 type Props = {};
 
@@ -12,20 +13,7 @@ export default function Bill({}: Props) {
   const router = useRouter();
   const { user, updateUser } = useUser();
 
-  const navbarItems = [
-    {
-      name: 'Houses',
-      href: `/homeowner/house`,
-    },
-    {
-      name: 'Bills',
-      href: `/homeowner/bill`,
-    },
-    {
-      name: 'Services',
-      href: `/homeowner/service`,
-    },
-  ];
+  
 
   const onAddBillClicked = () => {
     router.push('/homeowner/bill/add');
@@ -38,7 +26,7 @@ export default function Bill({}: Props) {
       <div>
         <div className='px-8 pt-8 text-lg'>Welcome, {user?.name}!</div>
         {/* Listings, Update and Delete Buttons are here as well */}
-        <BillListingController user={user} />
+        <BillManagementController user={user} />
 
         {/* Add house */}
         <div className='flex w-full justify-end p-8'>

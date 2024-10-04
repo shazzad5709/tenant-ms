@@ -3,7 +3,7 @@ import HouseList from '@/components/interface/HouseList';
 import { User } from '@/context/UserContext';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import HouseEntity, { House } from '../entity/House';
+import {HouseEntity,  House } from '../entity/House';
 import { InfinitySpin } from 'react-loader-spinner';
 import { Button } from '@/components/ui/button';
 

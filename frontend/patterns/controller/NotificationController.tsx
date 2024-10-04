@@ -1,7 +1,7 @@
 'use client';
 import useUser from '@/hooks/useUser';
 import { useEffect, useState } from 'react';
-import NotificationEntity from '../entity/Notification';
+import {NotificationEntity} from '../entity/Notification';
 import { NotificationBoundary } from '../boundary/NotifcationBoundary';
 
 type Props = {};

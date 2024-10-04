@@ -4,7 +4,7 @@ import {
   ComplaintFormData,
 } from '../boundary/AddComplaintFormBoundary';
 import { useRouter } from 'next/navigation';
-import ComplaintEntity from '../entity/Complaint';
+import { ComplaintEntity } from '../entity/Complaint';
 import useUser from '@/hooks/useUser';
 
 type Props = {

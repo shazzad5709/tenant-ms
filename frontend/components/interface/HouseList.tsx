@@ -8,26 +8,25 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '../ui/button';
-import { useRouter } from 'next/navigation';
 import { House } from '@/patterns/entity/House';
 
 type Props = {
   houses: House[];
   role: string;
+  alreadyApplied?: string[];
   onEditClicked?: (houseId: string) => void;
   onDeleteClicked?: (houseId: string) => void;
-  onOfferClicked?: (houseId: string) => void;
+  applyAsTenant?: (house: House) => void;
 };
 
 const HouseList = ({
   houses,
   role,
+  alreadyApplied,
   onEditClicked,
   onDeleteClicked,
-  onOfferClicked,
+  applyAsTenant,
 }: Props) => {
-  const router = useRouter();
-
   return (
     <div className='flex flex-col space-y-8 p-8'>
       <h1 className='text-3xl font-semibold'>Listings</h1>
@@ -69,13 +68,19 @@ const HouseList = ({
                 {house.owner}, {house.phoneNumber}
               </p>
             </CardContent>
-            {role === 'tenant' && (
+            {role === 'tenant' && applyAsTenant && alreadyApplied && (
               <CardFooter className='justify-end'>
                 <Button
+                  onClick={() => applyAsTenant(house)} // Pass house id
+                  disabled={alreadyApplied.includes(house.id)}
                   variant='outline'
                   className='text-green-600 hover:text-green-600 font-semibold'
                 >
-                  Apply
+                  {alreadyApplied.includes(house.id) ? (
+                    <>Applied</>
+                  ) : (
+                    <>Apply</>
+                  )}
                 </Button>
               </CardFooter>
             )}

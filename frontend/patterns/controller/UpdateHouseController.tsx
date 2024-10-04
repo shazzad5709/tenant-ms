@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { UpdateHouseFormBoundary } from '../boundary/UpdateHouseFormBoundary';
 import useUser from '@/hooks/useUser';
-import HouseEntity, { House } from '../entity/House';
+import { HouseEntity } from '../entity/House';
 import { HouseFormData } from '../boundary/AddHouseFormBoundary';
 import { InfinitySpin } from 'react-loader-spinner';
 
@@ -18,17 +18,18 @@ export const UpdateHouseController: React.FC<Props> = ({ houseId }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetchHouse = async (houseId: string) => {
-    setLoading(true);
     if (!houseId) {
       setLoading(false);
       return;
     }
 
     try {
+      setLoading(true);
       const res = await HouseEntity.getHouse(houseId);
       setHouse(res);
     } catch (error) {
       console.log(error);
+      alert('Failed to fetch house');
     } finally {
       setLoading(false);
     }

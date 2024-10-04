@@ -1,6 +1,5 @@
 import axios from "@/lib/axios";
 import { BillFormData } from "../boundary/AddBillFormBoundary";
-import { AxiosResponse } from "axios";
 
 export type Bill = {
   id: string;
@@ -18,7 +17,7 @@ export type Bill = {
   billingPeriodTo: Date | null;
 };
 
-export default class BillEntity {
+export class BillEntity {
 
   static readonly getBills = async (): Promise<Bill[]> => {
     try {
@@ -32,7 +31,15 @@ export default class BillEntity {
   static readonly getBill = async (billId: string): Promise<Bill> => {
     try {
       const res = await axios.get(`/bills/${billId}`);
-      return res.data;
+      const bill = {
+        ...res.data,
+        billDate: res.data.billDate ? new Date(res.data.billDate) : null,
+        dueDate: res.data.dueDate ? new Date(res.data.dueDate) : null,
+        paymentDate: res.data.paymentDate ? new Date(res.data.paymentDate) : null,
+        billingPeriodFrom: res.data.billingPeriodFrom ? new Date(res.data.billingPeriodFrom) : null,
+        billingPeriodTo: res.data.billingPeriodTo ? new Date(res.data.billingPeriodTo) : null,
+      }
+      return bill;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Failed to fetch bill');
     }
@@ -49,7 +56,17 @@ export default class BillEntity {
 
   static readonly addBill = async (data: BillFormData): Promise<string> => {
     try {
-      const res = await axios.post('/bills', data);
+      const req = {
+        ...data,
+        billDate: data.billDate ? data.billDate.toISOString() : null,
+        dueDate: data.dueDate ? data.dueDate.toISOString() : null,
+        paymentDate: data.paymentDate ? data.paymentDate.toISOString() : null,
+        billingPeriodFrom: data.billingPeriodFrom ? data.billingPeriodFrom.toISOString() : null,
+        billingPeriodTo: data.billingPeriodTo ? data.billingPeriodTo.toISOString() : null,
+      };
+
+
+      const res = await axios.post('/bills', req);
       return res.data.message;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Failed to add bill');
@@ -58,7 +75,16 @@ export default class BillEntity {
 
   static readonly updateBill = async (billId: string, data: BillFormData): Promise<string> => {
     try {
-      const res = await axios.put(`/bills/${billId}`, data);
+      const req = {
+        ...data,
+        billDate: data.billDate ? data.billDate.toISOString() : null,
+        dueDate: data.dueDate ? data.dueDate.toISOString() : null,
+        paymentDate: data.paymentDate ? data.paymentDate.toISOString() : null,
+        billingPeriodFrom: data.billingPeriodFrom ? data.billingPeriodFrom.toISOString() : null,
+        billingPeriodTo: data.billingPeriodTo ? data.billingPeriodTo.toISOString() : null,
+      };
+
+      const res = await axios.put(`/bills/${billId}`, req);
       return res.data.message;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Failed to update bill');
@@ -68,6 +94,7 @@ export default class BillEntity {
   static readonly getBillsByOwner = async (ownerId: string): Promise<Bill[]> => {
     try {
       const res = await axios.get(`/bills/owner/${ownerId}`);
+      console.log(res)
       return res.data;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Failed to fetch bills');

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { UpdateServiceFormBoundary } from '../boundary/UpdateServiceFormBoundary';
 import { ServiceFormData } from '../boundary/AddServiceFormBoundary';
 import useUser from '@/hooks/useUser';
-import ServiceEntity from '../entity/Service';
+import { ServiceEntity } from '../entity/Service';
 import { InfinitySpin } from 'react-loader-spinner';
 
 type Props = {
@@ -12,22 +12,19 @@ type Props = {
 };
 
 export const UpdateServiceController: React.FC<Props> = ({ serviceId }) => {
-  const [error, setError] = useState<string>('');
   const { user } = useUser();
   const router = useRouter();
   const [service, setService] = useState<ServiceFormData>();
+  const [loading, setLoading] = useState(false);
 
   const fetchService = async (ServiceId: string) => {
     try {
       const res = await ServiceEntity.getService(ServiceId);
-      if ('status' in res && res.status === 200) {
-        const service = res.data as ServiceFormData;
-        setService(service);
-      } else if (res instanceof Error) {
-        setError(res.message);
-      }
+      const service = res;
+      setService(service);
     } catch (error) {
       console.log(error);
+      alert('Failed to fetch service');
     }
   };
 
@@ -36,30 +33,31 @@ export const UpdateServiceController: React.FC<Props> = ({ serviceId }) => {
     fetchService(serviceId);
   }, []);
 
-  const updateServiceClickedEvent = (data: ServiceFormData) => {
+  const updateServiceClickedEvent = async (data: ServiceFormData) => {
     try {
-      const res = ServiceEntity.updateService(serviceId, data);
-      if ('status' in res && res.status === 200) {
-        alert('Service updated successfully');
-        router.push('/homeowner/service');
-      } else if (res instanceof Error) {
-        alert('Failed to update service');
-      }
+      const res = await ServiceEntity.updateService(serviceId, data);
+      alert(res);
+      router.push('/homeowner/service');
     } catch (error) {
       console.log(error);
     }
   };
 
-  if (user?.role !== 'Homeowner') {
+  if (user?.role !== 'homeowner') {
     return <div>Unauthorized</div>;
   }
 
-  if (!service)
+  if (loading) {
     return (
-      <div className='absolute inset-0 bg-white h-screen flex items-center justify-center text-xl'>
-        <InfinitySpin color='black' />
+      <div className='h-full flex items-center justify-center'>
+        <InfinitySpin color='#000' />
       </div>
     );
+  }
+
+  if (!service) {
+    return <div>Service not found</div>;
+  }
 
   return (
     <UpdateServiceFormBoundary

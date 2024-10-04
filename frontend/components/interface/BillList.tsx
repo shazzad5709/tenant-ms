@@ -28,15 +28,17 @@ const BillList = ({
 }: Props) => {
   return (
     <div className='flex flex-col space-y-8 p-8'>
-      <h1 className='font-semibold text-2xl'>Bills</h1>
+      <h1 className='font-semibold text-3xl'>Bills</h1>
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'>
         {bills.map((bill) => (
           <Card>
             <CardHeader>
               <CardTitle className='pt-4'>{bill.description}</CardTitle>
-              <CardDescription>{bill.issuedTo}</CardDescription>
+              <CardDescription className='text-lg text-black'>
+                {bill.issuedTo}
+              </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className='space-y-2'>
               <span className='text-sm font-semibold'>Billing Period: </span>
               {bill.billingPeriodFrom && bill.billingPeriodTo && (
                 <span className='text-sm mb-4'>
@@ -54,7 +56,7 @@ const BillList = ({
 
               <p className='text-sm'>
                 <span className='font-semibold'>Status: </span>
-                {bill.status}
+                {bill.status.toUpperCase()}
               </p>
 
               {bill.dueDate && (
@@ -75,14 +77,27 @@ const BillList = ({
                 Amount: {'$' + bill.amount.toLocaleString('en-US')}
               </p>
             </CardContent>
-            <CardFooter className='justify-end'>
-              <Button
-                variant='outline'
-                className='border border-black font-semibold'
-              >
-                Download
-              </Button>
-            </CardFooter>
+            {/* {role === 'tenant' && (
+              <CardFooter className='justify-end'>
+                <Button
+                  variant='outline'
+                  className='border border-black font-semibold'
+                >
+                  Download
+                </Button>
+              </CardFooter>
+            )} */}
+            {role === 'homeowner' && (
+              <CardFooter className='justify-end'>
+                <Button
+                  variant='outline'
+                  className='border border-black font-semibold'
+                  onClick={() => onEditClicked && onEditClicked(bill.id)}
+                >
+                  Edit
+                </Button>
+              </CardFooter>
+            )}
           </Card>
         ))}
       </div>

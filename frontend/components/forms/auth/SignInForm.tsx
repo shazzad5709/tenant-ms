@@ -50,9 +50,8 @@ export default function SignInForm({
       </div>
       <Button onClick={handleSubmit}>Sign In</Button>
       <span>
-        Don't have an account?
-        <Link href={'/register'} className='text-green-700'>
-          {' '}
+        Don't have an account?{' '}
+        <Link href={'/register'} className='underline hover:text-indigo-700'>
           Sign Up!
         </Link>
       </span>

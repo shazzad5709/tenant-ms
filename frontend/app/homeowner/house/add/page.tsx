@@ -5,26 +5,14 @@ import { AddHouseController } from '@/patterns/controller/AddHouseController';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { InfinitySpin } from 'react-loader-spinner';
+import { navbarItems } from '../../page';
 
 type Props = {};
 
 export default function AddHousePage({}: Props) {
   const [loading, setLoading] = useState(false);
 
-  const navbarItems = [
-    {
-      name: 'Houses',
-      href: `/homeowner/house`,
-    },
-    {
-      name: 'Bills',
-      href: `/homeowner/bill`,
-    },
-    {
-      name: 'Services',
-      href: `/homeowner/service`,
-    },
-  ];
+  
 
   if (loading) {
     return (

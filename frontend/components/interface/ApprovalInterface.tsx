@@ -7,51 +7,63 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { users } from '@/data/users';
 import { Button } from '../ui/button';
+import { Tenant } from '@/patterns/entity/Tenant';
+import { ApplicationData } from '@/patterns/controller/ApplicationController';
+import { Application } from '@/patterns/entity/Application';
 
-type Props = {};
+type Props = {
+  applications: ApplicationData[];
+  onAcceptClicked?: (application: ApplicationData) => void;
+  onRejectClicked?: (application: Application) => void;
+};
 
-const ApprovalInterface = (props: Props) => {
+const ApprovalInterface = ({
+  applications,
+  onAcceptClicked,
+  onRejectClicked,
+}: Props) => {
   return (
     <div className='flex flex-col space-y-8 p-8'>
       <h1 className='font-semibold text-2xl'>Requests</h1>
       <div className='flex space-x-4'>
-        {users.map((user) => (
+        {applications.map((application) => (
           <Card>
             <CardHeader>
               <CardTitle>
-                {user.firstName} {user.lastName}
+                {application.tenant.firstName} {application.tenant.lastName}
               </CardTitle>
               <CardDescription>
-                <span className='text-black text-base'>{user.email}</span>
-                <br />
-                <span className='text-black text-base capitalize'>
-                  {user.role}
+                <span className='text-black text-base'>
+                  {application.tenant.email}
                 </span>
+                <br />
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <p className='text-sm italic font-semibold'>Address</p>
-              <p className='text-sm mb-4'>{user.address}</p>
-
+            <CardContent className='space-y-2'>
               <p className='text-sm'>
                 <span className='font-semibold'>Phone: </span>
-                {user.phone}
+                {application.tenant.phoneNumber}
               </p>
               <p className='text-sm'>
                 <span className='font-semibold'>Passport ID: </span>
-                {user.passportId}
+                {application.tenant.passportID}
+              </p>
+              <p className='text-sm'>
+                <span className='font-semibold'>House ID: </span>
+                {application.application.houseId}
               </p>
             </CardContent>
-            <CardFooter className='justify-between'>
+            <CardFooter className='justify-between gap-4'>
               <Button
+                onClick={() => onRejectClicked?.(application.application)}
                 variant='outline'
                 className='text-red-600 hover:text-red-600 font-semibold'
               >
                 Reject
               </Button>
               <Button
+                onClick={() => onAcceptClicked?.(application)}
                 variant='outline'
                 className='text-green-600 hover:text-green-600 font-semibold'
               >

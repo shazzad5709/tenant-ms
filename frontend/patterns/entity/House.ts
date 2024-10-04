@@ -20,7 +20,7 @@ export type House = {
   phoneNumber: string;
 };
 
-export default class HouseEntity {
+export class HouseEntity {
 
   static readonly getHouses = async (): Promise<House[]> => {
     try {
@@ -70,7 +70,7 @@ export default class HouseEntity {
 
   static readonly getHousesByOwner = async (ownerId: string): Promise<House[]> => {
     try {
-      const res = await axios.get(`/houses?id=${ownerId}`);
+      const res = await axios.get(`/houses?ownerId=${ownerId}`);
       return res.data;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Failed to fetch houses');

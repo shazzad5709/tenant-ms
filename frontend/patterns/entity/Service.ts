@@ -17,90 +17,90 @@ export type Service = {
   city: string;
   state: string;
   zipCode: string;
-  houseOwner: string;
+  houseOwnerName: string;
   houseOwnerId: string;
 }
-export default class ServiceEntity {
+export class ServiceEntity {
 
-  static async getServices(): Promise<AxiosResponse<any> | Error> {
+  static async getServices(): Promise<Service[]> {
     try {
       const res = await axios.get('/services');
-      return res;
+      return res.data;
     } catch (error: any) {
       return error;
     }
   }
 
-  static async getService(serviceId: string): Promise<AxiosResponse<any> | Error> {
+  static async getService(serviceId: string): Promise<Service> {
     try {
       const res = await axios.get(`/services/${serviceId}`);
-      return res;
+      return res.data;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to fetch bills');
     }
   }
 
-  static async deleteService(serviceId: string): Promise<AxiosResponse<any> | Error> {
+  static async deleteService(serviceId: string): Promise<string> {
     try {
       const res = await axios.delete(`/services/${serviceId}`);
-      return res;
+      return res.data.message;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to fetch bills');
     }
   }
 
-  static async addService(data: ServiceFormData): Promise<AxiosResponse<any> | Error> {
+  static async addService(data: ServiceFormData): Promise<string> {
     try {
       const res = await axios.post('/services', data);
-      return res;
+      return res.data.message;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to fetch bills');
     }
   }
 
-  static async updateService(serviceId: string, data: ServiceFormData): Promise<AxiosResponse<any> | Error> {
+  static async updateService(serviceId: string, data: ServiceFormData): Promise<string> {
     try {
       const res = await axios.put(`/services/${serviceId}`, data);
-      return res;
+      return res.data.message;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to fetch bills');
     }
   }
 
-  static async getServicesByOwner(ownerId: string): Promise<AxiosResponse<any> | Error> {
+  static async getServicesByOwner(ownerId: string): Promise<Service[]> {
     try {
       const res = await axios.get(`/services/owner/${ownerId}`);
-      return res;
+      return res.data;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to fetch bills');
     }
   }
 
-  static async getServicesByTenant(tenantId: string): Promise<AxiosResponse<any> | Error> {
+  static async getServicesByTenant(tenantId: string): Promise<Service[]> {
     try {
       const res = await axios.get(`/services/tenant/${tenantId}`);
-      return res;
+      return res.data;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to fetch bills');
     }
   }
 
-  static async getServicesByHouse(houseId: string): Promise<AxiosResponse<any> | Error> {
+  static async getServicesByHouse(houseId: string): Promise<Service[]> {
     try {
       const res = await axios.get(`/services/house/${houseId}`);
-      return res;
+      return res.data;
     } catch (error: any) {
-      return error;
+      throw new Error(error.response?.data?.message || 'Failed to fetch bills');
     }
   }
 
-  static async placeOrder(serviceId: string, tenantId: string, houseId: string): Promise<AxiosResponse<any> | Error> {
-    try {
-      // TODO: Validate order
-      const res = await axios.post(`/services/${serviceId}/offer`, { offer });
-      return res;
-    } catch (error: any) {
-      return error;
-    }
-  }
+  // static async placeOrder(serviceId: string, tenantId: string, houseId: string): Promise<AxiosResponse<any> | Error> {
+  //   try {
+  //     // TODO: Validate order
+  //     const res = await axios.post(`/services/${serviceId}/offer`, { offer });
+  //     return res;
+  //   } catch (error: any) {
+  //     throw new Error(error.response?.data?.message || 'Failed to fetch bills');
+  //   }
+  // }
 }

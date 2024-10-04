@@ -11,10 +11,10 @@ class UserEntity(BaseModel):
   password: str
   phoneNumber: Optional[str] = None
   role: str
-  name: str
+  name: Optional[str] = None
 
   def validate_password(self):
-    print(len(self.password) >= 6)
+    # print(len(self.password) >= 6)
     return len(self.password) >= 6
 
   def hash_password(self) -> str:
@@ -35,7 +35,7 @@ class UserEntity(BaseModel):
 
     try:
       result = await db.user.insert_one(self.dict())
-      return result
+      return str(result.inserted_id)
 
     except Exception as e:
       raise HTTPException(status_code=400, detail=str(e))

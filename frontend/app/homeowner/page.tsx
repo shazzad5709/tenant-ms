@@ -1,14 +1,36 @@
 'use client';
-import HouseList from '@/components/interface/HouseList';
-import { Button } from '@/components/ui/button';
-import Navbar from '@/components/ui/navbar';
-import useUser from '@/hooks/useUser';
-import axios from '@/lib/axios';
-import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
 import { InfinitySpin } from 'react-loader-spinner';
 
 type Props = {};
+
+export const navbarItems = [
+  {
+    name: 'Houses',
+    href: `/homeowner/house`,
+  },
+  {
+    name: 'Bills',
+    href: `/homeowner/bill`,
+  },
+  {
+    name: 'Services',
+    href: `/homeowner/service`,
+  },
+  {
+    name: 'Complaints',
+    href: `/homeowner/complaint`,
+  },
+  {
+    name: 'Applications',
+    href: `/homeowner/application`,
+  },
+  {
+    name: 'Notifications',
+    href: `/notification`,
+  },
+];
 
 export default function Homeowner({}: Props) {
   const router = useRouter();

@@ -5,7 +5,7 @@ import {
 } from '../boundary/AddServiceFormBoundary';
 import { useRouter } from 'next/navigation';
 import useUser from '@/hooks/useUser';
-import ServiceEntity from '../entity/Service';
+import { ServiceEntity } from '../entity/Service';
 
 type Props = {
   loading: boolean;
@@ -19,26 +19,25 @@ export const AddServiceController: React.FC<Props> = ({
   const { user, updateUser } = useUser();
   const router = useRouter();
 
-  const addServiceClickedEvent = (data: ServiceFormData) => {
+  const addServiceClickedEvent = async (data: ServiceFormData) => {
     try {
       setLoading(true);
 
-      const res = ServiceEntity.addService(data);
+      console.log(data);
 
-      if ('status' in res && res.status === 200) {
-        alert('Service added successfully');
-        router.push('/homeowner/service');
-      } else if (res instanceof Error) {
-        alert('Failed to add service');
-      }
+      const res = await ServiceEntity.addService(data);
+
+      alert('Service added successfully');
+      router.push('/homeowner/service');
     } catch (error) {
       console.log(error);
+      alert('Failed to add service');
     } finally {
       setLoading(false);
     }
   };
 
-  if (user?.role !== 'Homeowner') {
+  if (user?.role !== 'homeowner') {
     return <div>Unauthorized</div>;
   }
 
