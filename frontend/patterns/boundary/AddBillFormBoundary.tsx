@@ -47,7 +47,7 @@ export const AddBillFormBoundary: React.FC<AddBillFormBoundaryProps> = ({
     issuedTo: 'Alice Davis',
     description: 'Electricity Bill',
     issuerId: '',
-    issuedToId: '66ff44209ccb2df119fd97b2',
+    issuedToId: '670051434d572bf60e602167',
     billDate: new Date('2024-09-15'),
     dueDate: new Date('2024-10-01'),
     amount: 120.5,

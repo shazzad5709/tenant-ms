@@ -44,7 +44,7 @@ export const AddServiceFormBoundary: React.FC<AddServiceFormBoundaryProps> = ({
     zipCode: '95112',
     houseOwnerId: '',
     houseOwnerName: '',
-    houseId: '66e6f8bcdcb77b93b777db4e',
+    houseId: '670023b90f10e70b93b6c861',
   });
 
   const handleSubmit = (event: any) => {

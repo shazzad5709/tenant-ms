@@ -20,8 +20,8 @@ export const SignInFormBoundary: React.FC<SignInFormBoundaryProps> = ({
 
   // mock data
   const [data, setData] = useState<SignInFormData>({
-    email: 'john@doe.com',
-    password: 'johndoe',
+    email: 'robert@johnson.com',
+    password: 'robertjohnson',
   });
 
   const handleSubmit = (event: any) => {
