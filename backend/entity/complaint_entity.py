@@ -35,7 +35,7 @@ class ResponseModel(BaseModel):
 
 class ComplaintBoundary(BaseModel):
   tenantName: str
-  tenantEmail: str
+  tenantEmail: EmailStr
   tenantPhone: str
   houseId: str
   houseNumber: str
@@ -97,10 +97,10 @@ async def fetch_complaint_by_house_id(houseId: str):
     raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/tenant/{tenantId}")
-async def fetch_complaint_by_tenant_id(tenantId: str):
+@router.get("/tenant/{email}")
+async def fetch_complaint_by_tenant(email: EmailStr):
   try:
-    complaints = await db["complaint"].find({"tenantId": tenantId}).to_list(length=100)
+    complaints = await db["complaint"].find({"tenantEmail": email}).to_list(length=100)
     return [serialize_complaint(complaint) for complaint in complaints]
 
   except Exception as e:

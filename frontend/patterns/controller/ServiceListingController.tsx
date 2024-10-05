@@ -17,11 +17,11 @@ export const ServiceListingController: React.FC<Props> = ({ user }) => {
   const [tenantInfo, setTenantInfo] = useState<Tenant>();
 
   const fetchAllServices = async () => {
-    if (!user?.id) return; // Only fetch when user is available
+    if (!tenantInfo?.houseId || !user?.id) return; // Only fetch when user is available
 
     try {
       setLoading(true);
-      const res = await ServiceEntity.getServicesByTenant(user.id);
+      const res = await ServiceEntity.getServicesByHouse(tenantInfo?.houseId);
       setServices(res);
     } catch (error) {
       console.log(error);
@@ -58,10 +58,10 @@ export const ServiceListingController: React.FC<Props> = ({ user }) => {
     if (tenantInfo?.houseId) {
       fetchAllServices();
     }
-  }, [tenantInfo]);
+  }, [tenantInfo?.houseId]);
 
-  const orderService = (ServiceId: string) => {
-    router.push(`/tenant/service/${ServiceId}`);
+  const orderService = async (ServiceId: string) => {
+    alert('Service ordered');
   };
 
   if (user?.role !== 'tenant') {

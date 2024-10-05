@@ -5,6 +5,25 @@ import { InfinitySpin } from 'react-loader-spinner';
 
 type Props = {};
 
+export const navbarItems = [
+  {
+    name: 'Houses',
+    href: `/tenant/house`,
+  },
+  {
+    name: 'Bills',
+    href: `/tenant/bill`,
+  },
+  {
+    name: 'Services',
+    href: `/tenant/service`,
+  },
+  {
+    name: 'Complaints',
+    href: `/tenant/complaint`,
+  },
+];
+
 export default function Tenant({}: Props) {
   const router = useRouter();
 

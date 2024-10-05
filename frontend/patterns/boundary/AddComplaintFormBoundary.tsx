@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ComplaintForm from '@/components/forms/complaint/AddComplaintForm';
 import useUser from '@/hooks/useUser';
+import { Tenant } from '../entity/Tenant';
 
 export type ComplaintFormData = {
   tenantName: string;
@@ -12,29 +13,30 @@ export type ComplaintFormData = {
   state: string;
   zipCode: string;
   complaintType: string;
-  complaintDescription: string;
+  description: string;
 };
 
 type AddComplaintFormBoundaryProps = {
+  tenant?: Tenant;
   addComplaint: (data: ComplaintFormData) => void;
 };
 
 export const AddComplaintFormBoundary: React.FC<
   AddComplaintFormBoundaryProps
-> = ({ addComplaint }) => {
+> = ({ tenant, addComplaint }) => {
   const { user } = useUser();
 
   const [data, setData] = useState<ComplaintFormData>({
-    tenantName: '',
-    tenantEmail: '',
-    tenantPhone: '',
-    houseNumber: '',
-    streetAddress: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    complaintType: '',
-    complaintDescription: '',
+    tenantName: tenant ? tenant.firstName + ' ' + tenant.lastName : '',
+    tenantEmail: tenant ? tenant.email : '',
+    tenantPhone: tenant ? tenant.phoneNumber : '',
+    houseNumber: '13 Rd',
+    streetAddress: '789 Maple Dr',
+    city: 'Scarsdale',
+    state: 'NY',
+    zipCode: '10583',
+    complaintType: 'Pest Control',
+    description: 'There are cockroaches in the apartment kitchen.',
   });
 
   const handleSubmit = (event: any) => {

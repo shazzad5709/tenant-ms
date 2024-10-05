@@ -24,7 +24,7 @@ export default function HouseManagementController({ user }: Readonly<Props>) {
     if (!user?.id) return;
 
     try {
-      const res = await ComplaintEntity.getComplaintsByTenant(user.id);
+      const res = await ComplaintEntity.getComplaintsByTenant(user.email);
       setComplaints(res);
     } catch (error) {
       console.log(error);
@@ -54,10 +54,10 @@ export default function HouseManagementController({ user }: Readonly<Props>) {
     router.push(`/homeowner/house/update?id=${houseId}`);
   };
 
-  const onDeleteClickedEvent = async (houseId: string) => {
+  const onDeleteClickedEvent = async (complaintId: string) => {
     try {
       setLoading(true); // Start loading
-      const res = await HouseEntity.deleteHouse(houseId);
+      const res = await ComplaintEntity.deleteComplaint(complaintId);
       alert(res);
       fetchAllComplaints();
     } catch (error) {
@@ -83,7 +83,7 @@ export default function HouseManagementController({ user }: Readonly<Props>) {
   if (loading) {
     return (
       <div className='flex justify-center items-center h-screen'>
-        <InfinitySpin color='#00BFFF' />
+        <InfinitySpin color='#00000' />
       </div>
     );
   }

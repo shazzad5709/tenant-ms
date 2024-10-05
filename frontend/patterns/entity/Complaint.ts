@@ -47,7 +47,7 @@ export class ComplaintEntity {
     }
   }
 
-  static readonly addComplaint = async (data: ComplaintFormData): Promise<string> => {
+  static readonly addComplaint = async (data: any): Promise<string> => {
     try {
       const res = await axios.post('/complaints', data);
       return res.data.message;
@@ -58,6 +58,7 @@ export class ComplaintEntity {
 
   static readonly updateComplaint = async (complaintId: string, data: ComplaintFormData): Promise<string> => {
     try {
+      console.log(data)
       const res = await axios.put(`/complaints/${complaintId}`, data);
       return res.data.message;
     } catch (error: any) {
@@ -65,9 +66,9 @@ export class ComplaintEntity {
     }
   }
 
-  static readonly getComplaintsByTenant = async (tenantId: string): Promise<Complaint[]> => {
+  static readonly getComplaintsByTenant = async (email: string): Promise<Complaint[]> => {
     try {
-      const res = await axios.get(`/complaints/tenant/${tenantId}`);
+      const res = await axios.get(`/complaints/tenant/${email}`);
       return res.data;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Failed to fetch complaints');

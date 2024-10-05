@@ -84,7 +84,7 @@ const ServiceList = ({
                   variant='outline'
                   className='text-green-600 hover:text-green-600 font-semibold'
                 >
-                  Apply
+                  Order
                 </Button>
               </CardFooter>
             )}
