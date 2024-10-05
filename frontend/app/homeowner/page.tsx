@@ -26,10 +26,6 @@ export const navbarItems = [
     name: 'Applications',
     href: `/homeowner/application`,
   },
-  {
-    name: 'Notifications',
-    href: `/notification`,
-  },
 ];
 
 export default function Homeowner({}: Props) {
