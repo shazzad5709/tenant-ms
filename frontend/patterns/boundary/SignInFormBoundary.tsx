@@ -1,11 +1,13 @@
 import SignInForm from '@/components/forms/auth/SignInForm';
 import { useState } from 'react';
 
+// user input data type declaration
 export type SignInFormData = {
   email: string;
   password: string;
 };
 
+// information about control method
 type SignInFormBoundaryProps = {
   signIn: (data: SignInFormData) => void;
 };
@@ -18,7 +20,7 @@ export const SignInFormBoundary: React.FC<SignInFormBoundaryProps> = ({
   //   password: '',
   // });
 
-  // mock data
+  // current data and how to capture data from input change
   const [data, setData] = useState<SignInFormData>({
     email: 'robert@johnson.com',
     password: 'robertjohnson',
